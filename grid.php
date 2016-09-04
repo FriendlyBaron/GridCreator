@@ -25,8 +25,8 @@
 		.submenu{display:none;}
 		#my-div
 		{
-			width    : 900px;
-			height   : 200px;
+			width	 : 900px;
+			height	 : 200px;
 			overflow : hidden;
 			position : relative;
 			margin: 0 auto;
@@ -36,74 +36,74 @@
 		#my-iframe
 		{
 			position : absolute;
-			top      : -850px;
-			left     : -150px;
-			width    : 1280px;
-			height   : 1200px;
+			top		 : -850px;
+			left	 : -150px;
+			width	 : 1280px;
+			height	 : 1200px;
 			margin: 0 auto;
 			display:block;
 		}
 	</style>
 </head>
 <body>
-	<?php    
-    set_time_limit(3600000); //60 minutes
-    
-    $numberOfRaces = 4;
-    //$tolerance = 2;
-    $visualInputList = array_fill(0, 30, "");
-    $inputList = []; //seperate actual list, as the visual might have blanks from data entry
-    $numberOfDrivers = 0;
-    
-    if(isset($_GET['numberOfRaces']))
+	<?php	 
+	set_time_limit(3600000); //60 minutes
+	
+	$numberOfRaces = 4;
+	//$tolerance = 2;
+	$visualInputList = array_fill(0, 30, "");
+	$inputList = []; //seperate actual list, as the visual might have blanks from data entry
+	$numberOfDrivers = 0;
+	
+	if(isset($_GET['numberOfRaces']))
 	{
-        $numberOfRaces = ($_GET['numberOfRaces']);
+		$numberOfRaces = ($_GET['numberOfRaces']);
 	}
-    /*if(isset($_GET['tolerance']))
+	/*if(isset($_GET['tolerance']))
 	{
-        $tolerance = ($_GET['tolerance']);
+		$tolerance = ($_GET['tolerance']);
 		Tolerance: <input type="text" name="tolerance" value="<?php echo $tolerance;?>"></br>
 	}*/
-    ?>
+	?>
 	
 	<h3>FriendlyBaron's Championship Grid Creator</h3>
 	Created for NODO - See discussion: [link later]</br></br>
 	
-    <form>
-    Number of Races: <input type="number" name="numberOfRaces" min="1" max="256" value="<?php echo $numberOfRaces;?>"></br></br>
-    
-    <?php
-    if(isset($_GET['player1']))
+	<form>
+	Number of Races: <input type="number" name="numberOfRaces" min="1" max="256" value="<?php echo $numberOfRaces;?>"></br></br>
+	
+	<?php
+	if(isset($_GET['player1']))
 	{
-        for ($x = 1; $x < 31; $x++)
-        {
-            $testStr = ('player'.$x);
-            if(isset($_GET[$testStr]) && $_GET[$testStr] != "")
-            {
-                $visualInputList[$x-1] = $_GET[$testStr];
-                $inputList[$x-1] = $_GET[$testStr];
-                $numberOfDrivers++;
-            }
-        }
+		for ($x = 1; $x < 31; $x++)
+		{
+			$testStr = ('player'.$x);
+			if(isset($_GET[$testStr]) && $_GET[$testStr] != "")
+			{
+				$visualInputList[$x-1] = $_GET[$testStr];
+				$inputList[$x-1] = $_GET[$testStr];
+				$numberOfDrivers++;
+			}
+		}
 	}
-    
-    for ($x = 1; $x < 31; $x++)
-    {
-        ?>
-            Player <?php echo $x; ?>:<?php if($x < 10){echo "&nbsp;&nbsp;";} ?> <input type="text" name="player<?php echo $x;?>" value="<?php echo $visualInputList[$x-1];?>"></br>
-        <?php
-    } 
-    ?>
+	
+	for ($x = 1; $x < 31; $x++)
+	{
+		?>
+			Player <?php echo $x; ?>:<?php if($x < 10){echo "&nbsp;&nbsp;";} ?> <input type="text" name="player<?php echo $x;?>" value="<?php echo $visualInputList[$x-1];?>"></br>
+		<?php
+	} 
+	?>
 	</br>
-    <input type="submit" value="Create Grids"></br>
-    </form>
+	<input type="submit" value="Create Grids"></br>
+	</form>
 
-    <?php
-    
-    if($numberOfDrivers > 1 && $numberOfRaces < 101 && $numberOfRaces > 0)
-    {
-        $races = [];
-        
+	<?php
+	
+	if($numberOfDrivers > 1 && $numberOfRaces < 101 && $numberOfRaces > 0)
+	{
+		$races = [];
+		
 		if ($numberOfRaces == 1)
 		{
 			shuffle($inputList);
@@ -135,7 +135,7 @@
 			listArray($races[1]);
 			echo '</div>';
 		}
-        else
+		else
 		{
 			for ($x = 0; $x < $numberOfRaces; $x++)
 			{
@@ -274,75 +274,75 @@
 				echo '</div>';
 			}
 		}
-    }
-    
-    function doSwap($racesList, $low, $high)
-    {    
-        $possibles = [];
-        for ($y = 0; $y < count($racesList); $y++)
-        {
-            $possibles[$y] = $y;
-        }
-    
-        shuffle($possibles);
+	}
+	
+	function doSwap($racesList, $low, $high)
+	{	 
+		$possibles = [];
+		for ($y = 0; $y < count($racesList); $y++)
+		{
+			$possibles[$y] = $y;
+		}
+	
+		shuffle($possibles);
 
-        foreach($possibles as $x) //tl;dr - this makes an array with numbers 0 to count($racesList)-1 in a random order and goes through it like a for loop. i dont remember the path taken in my head to get here, it was doing something else before
-        {
-            $positionInRace = $racesList[$x];
-            $namesAsKey = [];
-            $counter = 0;
-            ksort($positionInRace);
-        
-            foreach($positionInRace as $result) { //this reverses the array from being 1==>name to name==>1 so we can easily find starting position per race
-                $namesAsKey[$result] = $counter;
-                $counter++;
-            }
-            if ($namesAsKey[$low] < $namesAsKey[$high]) //if the lowest avg player's starting spot in race X is less than the starting spot of the highest - swap their spots!
-            {
-                $racesListCounter = 0;
-                $posLow = -1;
-                $posHigh = -1;
-                foreach($racesList[$x] as $result) { //now we go back into the actual 1==>name list
-                    if(strcmp($result, $low) == 0)
-                    {
-                        $posLow = $racesListCounter;
-                    }
-                    if(strcmp($result, $high) == 0)
-                    {
-                        $posHigh = $racesListCounter;
-                    }
-                    $racesListCounter++;
-                }
-                $racesList[$x][$posLow] = $high;
-                $racesList[$x][$posHigh] = $low;
-                
-                return $racesList;
-            }
-        }
-        return $racesList;
-    }
-     
-    function listArray($theArray)
-    {
+		foreach($possibles as $x) //tl;dr - this makes an array with numbers 0 to count($racesList)-1 in a random order and goes through it like a for loop. i dont remember the path taken in my head to get here, it was doing something else before
+		{
+			$positionInRace = $racesList[$x];
+			$namesAsKey = [];
+			$counter = 0;
+			ksort($positionInRace);
+		
+			foreach($positionInRace as $result) { //this reverses the array from being 1==>name to name==>1 so we can easily find starting position per race
+				$namesAsKey[$result] = $counter;
+				$counter++;
+			}
+			if ($namesAsKey[$low] < $namesAsKey[$high]) //if the lowest avg player's starting spot in race X is less than the starting spot of the highest - swap their spots!
+			{
+				$racesListCounter = 0;
+				$posLow = -1;
+				$posHigh = -1;
+				foreach($racesList[$x] as $result) { //now we go back into the actual 1==>name list
+					if(strcmp($result, $low) == 0)
+					{
+						$posLow = $racesListCounter;
+					}
+					if(strcmp($result, $high) == 0)
+					{
+						$posHigh = $racesListCounter;
+					}
+					$racesListCounter++;
+				}
+				$racesList[$x][$posLow] = $high;
+				$racesList[$x][$posHigh] = $low;
+				
+				return $racesList;
+			}
+		}
+		return $racesList;
+	}
+	 
+	function listArray($theArray)
+	{
 		$count = 1;
-        foreach($theArray as $result) {
-            echo $count,". ",$result,'</br>';
+		foreach($theArray as $result) {
+			echo $count,". ",$result,'</br>';
 			$count++;
-        }
-    }
-    
-    function getAverage($name, $races)
-    {
-        $amount = count($races);
-        $running = 0;
-        
-        for ($x = 0; $x < $amount; $x++)
-        {
-            $running += (1+array_search($name, $races[$x])); //gives the position (place) in array
-        }
-        return ($running/$amount);
-    }
-    
+		}
+	}
+	
+	function getAverage($name, $races)
+	{
+		$amount = count($races);
+		$running = 0;
+		
+		for ($x = 0; $x < $amount; $x++)
+		{
+			$running += (1+array_search($name, $races[$x])); //gives the position (place) in array
+		}
+		return ($running/$amount);
+	}
+	
 	?>
   
 
